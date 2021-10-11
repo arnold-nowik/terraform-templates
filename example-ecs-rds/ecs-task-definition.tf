@@ -7,7 +7,6 @@ resource "aws_ecs_task_definition" "example-stg-ecs-task-definition" {
     {
         "name": "${var.ecs_repository_name}",
         "image": "${var.ecs_repository_uri}",
-        "command": [""],
         "essential": true,
         "memory": 128,
         "portMappings": [

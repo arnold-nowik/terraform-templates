@@ -15,6 +15,17 @@ resource "aws_security_group" "example-stg-sg-allow-ssh" {
       prefix_list_ids  = null
       security_groups  = null
       self             = null
+    },
+    {
+      description      = "Open port 8080 for testing"
+      from_port        = 8080
+      to_port          = 8080
+      protocol         = "tcp"
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = ["::/0"]
+      prefix_list_ids  = null
+      security_groups  = null
+      self             = null
     }
   ]
 

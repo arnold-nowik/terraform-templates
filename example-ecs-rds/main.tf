@@ -6,14 +6,14 @@ terraform {
     }
   }
   backend "s3" {
-    bucket  = "terraform-state-test-444555666"
+    bucket  = "terraform-state-test-111444555666" # need to create and set unique bucket name for storing Terraform state file
     key     = "stg/terraform.tfstate"
-    profile = "example"
+    profile = "example" # AWS CLI profile name
   }
 }
 
 provider "aws" {
-  profile = "example"
+  profile = "example" # AWS CLI Profile name
   region  = local.region
 }
 
@@ -47,3 +47,7 @@ variable "ecs_repository_uri" {
   default     = "nginx:latest"
 }
 
+variable "ssh_public_key" {
+  description = "Public key for SSH into EC2 instance"
+  type        = string
+}

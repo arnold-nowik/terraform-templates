@@ -19,7 +19,7 @@ data "aws_ami" "amazon_linux2_ecs" {
 #SSH Key pair configuration
 resource "aws_key_pair" "example-stg-pem" {
   key_name   = "examplestg"
-  public_key = "YOUR_PUBLIC_KEY_HERE"
+  public_key = var.ssh_public_key
 }
 
 module "asg" {
@@ -34,6 +34,7 @@ module "asg" {
   desired_capacity          = 1
   wait_for_capacity_timeout = 0
   health_check_type         = "EC2"
+  protect_from_scale_in     = true
 
   # Launch template
   lt_name                = "example-stg-launch-template"
@@ -83,7 +84,20 @@ module "asg" {
       value               = "example-stg-asg"
       propagate_at_launch = true
     },
+    {
+      key                 = "AmazonECSManaged"
+      value               = ""
+      propagate_at_launch = true
+    }
   ]
+}
+
+resource "aws_appautoscaling_target" "example-stg-asg-ecs_target" {
+  max_capacity       = 1
+  min_capacity       = 1
+  resource_id        = "service/${aws_ecs_cluster.example-stg-ecs-cluster.name}/${aws_ecs_service.example-stg-ecs-service.name}"
+  scalable_dimension = "ecs:service:DesiredCount"
+  service_namespace  = "ecs"
 }
 
 # --- ECS capacity provider configuration ---
@@ -93,10 +107,10 @@ resource "aws_ecs_capacity_provider" "example-stg-ecs-cp" {
 
   auto_scaling_group_provider {
     auto_scaling_group_arn         = module.asg.autoscaling_group_arn
-    managed_termination_protection = "DISABLED"
+    managed_termination_protection = "ENABLED"
 
     managed_scaling {
-      status = "DISABLED"
+      status = "ENABLED"
     }
   }
 }
