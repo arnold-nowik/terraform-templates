@@ -49,3 +49,6 @@ resource "aws_iam_role_policy_attachment" "example-stg-iam-attach-s3-policy-for-
   policy_arn = aws_iam_policy.example-stg-iam-access-s3.arn
 }
 
+resource "aws_iam_service_linked_role" "example-stg-iam-ecs-linked-role" {
+  aws_service_name = "ecs.amazonaws.com"
+}

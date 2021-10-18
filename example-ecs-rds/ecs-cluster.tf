@@ -104,7 +104,9 @@ resource "aws_appautoscaling_target" "example-stg-asg-ecs_target" {
 
 resource "aws_ecs_capacity_provider" "example-stg-ecs-cp" {
   name = "example-stg-ecs-cp"
-
+  depends_on = [
+    aws_iam_service_linked_role.example-stg-iam-ecs-linked-role,
+  ]
   auto_scaling_group_provider {
     auto_scaling_group_arn         = module.asg.autoscaling_group_arn
     managed_termination_protection = "ENABLED"
