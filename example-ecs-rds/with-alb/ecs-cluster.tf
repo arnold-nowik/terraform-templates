@@ -7,7 +7,7 @@ data "aws_ami" "amazon_linux2_ecs" {
 
   filter {
     name   = "name"
-    values = ["amzn2-ami-ecs-*"]
+    values = ["amzn2-ami-ecs-hvm-*-x86_64-ebs"]
   }
 
   filter {
@@ -24,7 +24,7 @@ resource "aws_key_pair" "example-stg-pem" {
 
 module "asg" {
   source  = "terraform-aws-modules/autoscaling/aws"
-  version = "4.6.0"
+  version = ">=4.6.0"
 
   # Autoscaling group
   name                      = "example-stg-asg"
